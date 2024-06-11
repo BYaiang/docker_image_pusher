@@ -27,8 +27,10 @@ jobs:
     - name: Build and push image Aliyun
       run: |
         docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
+        docker info | grep -i 'experimental'
+        "experimental":true
         for line in $(cat images.txt); do
-          docker pull $line
+          docker pull --platform=arm/v7 $line
           image_name_tag=$(echo $line | awk -F'/' '{print $NF}')
           new_image="$ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/$image_name_tag"
           echo "docker tag $image $new_image"
